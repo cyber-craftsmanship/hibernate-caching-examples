@@ -1,0 +1,57 @@
+INSERT INTO publishers (id, name, version) VALUES (1, 'Addison Wesley', 0);
+INSERT INTO publishers (id, name, version) VALUES (2, 'Manning Publications', 0);
+INSERT INTO publishers (id, name, version) VALUES (3, 'OReilly Media', 0);
+
+INSERT INTO authors (id, first_name, last_name, version) VALUES (1, 'Joshua', 'Bloch', 0);
+INSERT INTO authors (id, first_name, last_name, version) VALUES (2, 'Gavin', 'King', 0);
+INSERT INTO authors (id, first_name, last_name, version) VALUES (3, 'Christian', 'Bauer', 0);
+INSERT INTO authors (id, first_name, last_name, version) VALUES (4, 'Gary', 'Gregory', 0);
+INSERT INTO authors (id, first_name, last_name, version) VALUES (5, 'Raoul-Gabriel', 'Urma', 0);
+INSERT INTO authors (id, first_name, last_name, version) VALUES (6, 'Mario', 'Fusco', 0);
+INSERT INTO authors (id, first_name, last_name, version) VALUES (7, 'Alan', 'Mycroft', 0);
+INSERT INTO authors (id, first_name, last_name, version) VALUES (8, 'Andrew Lee', 'Rubinger', 0);
+INSERT INTO authors (id, first_name, last_name, version) VALUES (9, 'Aslak', 'Knutsen', 0);
+INSERT INTO authors (id, first_name, last_name, version) VALUES (10, 'Bill', 'Burke', 0);
+INSERT INTO authors (id, first_name, last_name, version) VALUES (11, 'Scott', 'Oaks', 0);
+
+INSERT INTO books (id, publishing_date, title, publisher_id, version) VALUES (1, '2008-05-08', 'Effective Java', 1, 0);
+INSERT INTO books (id, publishing_date, title, publisher_id, version) VALUES (2, '2015-10-01', 'Java Persistence with Hibernate', 2, 0);
+INSERT INTO books (id, publishing_date, title, publisher_id, version) VALUES (3, '2014-08-28', 'Java 8 in Action', 1, 0);
+INSERT INTO books (id, publishing_date, title, publisher_id, version) VALUES (4, '2014-03-12', 'Continuous Enterprise Development in Java', 3, 0);
+INSERT INTO books (id, publishing_date, title, publisher_id, version) VALUES (5, '2010-09-08', 'Enterprise JavaBeans 3.1', 3, 0);
+INSERT INTO books (id, publishing_date, title, publisher_id, version) VALUES (6, '2014-04-29', 'Java Performance The Definitive Guide', 3, 0);
+
+INSERT INTO books_authors (book_id, author_id) VALUES (1, 1);
+INSERT INTO books_authors (book_id, author_id) VALUES (2, 2);
+INSERT INTO books_authors (book_id, author_id) VALUES (2, 3);
+INSERT INTO books_authors (book_id, author_id) VALUES (2, 4);
+INSERT INTO books_authors (book_id, author_id) VALUES (3, 5);
+INSERT INTO books_authors (book_id, author_id) VALUES (3, 6);
+INSERT INTO books_authors (book_id, author_id) VALUES (3, 7);
+INSERT INTO books_authors (book_id, author_id) VALUES (4, 8);
+INSERT INTO books_authors (book_id, author_id) VALUES (4, 9);
+INSERT INTO books_authors (book_id, author_id) VALUES (5, 8);
+INSERT INTO books_authors (book_id, author_id) VALUES (5, 10);
+INSERT INTO books_authors (book_id, author_id) VALUES (6, 11);
+
+INSERT INTO reviews (id, comment, rating, version, book_id) VALUES (1, 'comment', 1, 0, 1);
+INSERT INTO reviews (id, comment, rating, version, book_id) VALUES (2, 'comment', 4, 0, 1);
+INSERT INTO reviews (id, comment, rating, version, book_id) VALUES (3, 'comment', 0, 0, 1);
+INSERT INTO reviews (id, comment, rating, version, book_id) VALUES (4, 'comment', 4, 0, 1);
+INSERT INTO reviews (id, comment, rating, version, book_id) VALUES (5, 'comment', 1, 0, 2);
+INSERT INTO reviews (id, comment, rating, version, book_id) VALUES (6, 'comment', 4, 0, 2);
+INSERT INTO reviews (id, comment, rating, version, book_id) VALUES (7, 'comment', 3, 0, 2);
+INSERT INTO reviews (id, comment, rating, version, book_id) VALUES (8, 'comment', 4, 0, 2);
+INSERT INTO reviews (id, comment, rating, version, book_id) VALUES (9, 'comment', 4, 0, 3);
+INSERT INTO reviews (id, comment, rating, version, book_id) VALUES (10, 'comment', 3, 0, 3);
+INSERT INTO reviews (id, comment, rating, version, book_id) VALUES (11, 'comment', 3, 0, 3);
+INSERT INTO reviews (id, comment, rating, version, book_id) VALUES (12, 'comment', 4, 0, 4);
+INSERT INTO reviews (id, comment, rating, version, book_id) VALUES (13, 'comment', 4, 0, 4);
+INSERT INTO reviews (id, comment, rating, version, book_id) VALUES (14, 'comment', 0, 0, 4);
+INSERT INTO reviews (id, comment, rating, version, book_id) VALUES (15, 'comment', 1, 0, 4);
+INSERT INTO reviews (id, comment, rating, version, book_id) VALUES (16, 'comment', 4, 0, 5);
+INSERT INTO reviews (id, comment, rating, version, book_id) VALUES (17, 'comment', 3, 0, 5);
+INSERT INTO reviews (id, comment, rating, version, book_id) VALUES (18, 'comment', 2, 0, 5);
+INSERT INTO reviews (id, comment, rating, version, book_id) VALUES (19, 'comment', 1, 0, 5);
+INSERT INTO reviews (id, comment, rating, version, book_id) VALUES (20, 'comment', 2, 0, 6);
+INSERT INTO reviews (id, comment, rating, version, book_id) VALUES (21, 'comment', 4, 0, 6);
