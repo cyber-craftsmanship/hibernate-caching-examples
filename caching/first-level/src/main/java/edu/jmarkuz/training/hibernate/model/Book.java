@@ -37,9 +37,9 @@ public class Book implements Serializable {
 
     @ManyToMany
     @JoinTable(
-            name="BookAuthor",
-            joinColumns={@JoinColumn(name="bookId", referencedColumnName="id")},
-            inverseJoinColumns={@JoinColumn(name="authorId", referencedColumnName="id")})
+            name="books_authors",
+            joinColumns={@JoinColumn(name="book_id", referencedColumnName="id")},
+            inverseJoinColumns={@JoinColumn(name="author_id", referencedColumnName="id")})
     private Set<Author> authors = new HashSet<>();
 
     @OneToMany(mappedBy = "book")
