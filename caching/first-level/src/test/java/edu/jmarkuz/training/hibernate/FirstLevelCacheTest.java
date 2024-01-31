@@ -13,7 +13,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.logging.Logger;
 
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 
 public class FirstLevelCacheTest {
 
@@ -56,6 +56,64 @@ public class FirstLevelCacheTest {
             assertNotNull(book);
         });
     }
+
+    @Test
+    public void testRepeatableFindAuthorByIdInSameSession() {
+        doInTransaction(entityManager -> {
+            for (int i = 0; i < 3; i++) {
+                log.info("Iteration: " + i);
+
+                var author_1 = entityManager.find(Author.class, 1L);
+                log.info("Author_1: " + author_1);
+
+                var author_2 = entityManager.find(Author.class, 1L);
+                log.info("Author_2: " + author_2);
+
+                assertSame(author_1, author_2);
+                assertEquals(author_1, author_2);
+            }
+        });
+    }
+
+    @Test
+    public void testRepeatableFindAuthorByIdInDifferentSessions() {
+        var author_1 = doInTransactionResult(entityManager -> entityManager.find(Author.class, 1L));
+        var author_2 = doInTransactionResult(entityManager -> entityManager.find(Author.class, 1L));
+
+        assertNotSame(author_1, author_2);
+        assertEquals(author_1, author_2);
+    }
+
+    @Test
+    public void testRepeatableJPQLQueryInSameSession() {
+        doInTransaction(entityManager -> {
+            var author_1 = entityManager.createQuery("SELECT a FROM Author a WHERE id = ?1", Author.class)
+                    .setParameter(1, 1L)
+                    .getSingleResult();
+
+            var author_2 = entityManager.createQuery("SELECT a FROM Author a WHERE id = ?1", Author.class)
+                    .setParameter(1, 1L)
+                    .getSingleResult();
+
+            assertSame(author_1, author_2);
+            assertEquals(author_1, author_2);
+        });
+    }
+
+    @Test
+    public void testRepeatableJPQLQueryInDifferentSessions() {
+        var author_1 = doInTransactionResult(entityManager -> entityManager.createQuery("SELECT a FROM Author a WHERE id = ?1", Author.class)
+                .setParameter(1, 1L)
+                .getSingleResult());
+
+        var author_2 = doInTransactionResult(entityManager -> entityManager.createQuery("SELECT a FROM Author a WHERE id = ?1", Author.class)
+                .setParameter(1, 1L)
+                .getSingleResult());
+
+        assertNotSame(author_1, author_2);
+        assertEquals(author_1, author_2);
+    }
+
 
     private void doInTransaction(Consumer<EntityManager> entityManagerConsumer) {
         var entityManager = factory.createEntityManager();
