@@ -16,4 +16,15 @@ public class CacheManagementTest extends BaseTest {
             Assert.assertFalse(entityManager.contains(author_1));
         });
     }
+
+    @Test
+    public void testCacheClearAction() {
+        doInTransaction(entityManager -> {
+            var author_1 = entityManager.find(Author.class, 1L);
+            Assert.assertTrue(entityManager.contains(author_1));
+            // clearing cache
+            entityManager.clear();
+            Assert.assertFalse(entityManager.contains(author_1));
+        });
+    }
 }
