@@ -4,7 +4,7 @@
 
 create table customers
 (
-    customer_id   int primary key,
+    customer_id   serial primary key,
     customer_name varchar(128) not null,
     contact_name  varchar(128) not null,
     address       varchar(128),
@@ -488,8 +488,22 @@ alter table customers
 -- Select all records from the Customers where the PostalCode column is empty.
 -- The following SQL statement updates the first customer (CustomerID = 1) with a new contact person and a new city.
 -- The following SQL statement will update the ContactName to  'Juan ' for all records where country is  'Mexico ':
--- Update the City column of all records in the Customers table.
+-- Update the City column with adding * prefix of 1-st records in the Customers table.
+update customers
+set city = (concat((select city from customers where customer_id = 1), '*'))
+where customer_id = 1;
+-- Update the City column with removing * prefix of 1-st records in the Customers table.
+update customers
+set city = (select substring(customers.city, 0, length(customers.city)) from customers where customer_id = 1) where customer_id = 1;
+-- select city name from customers without last * symbol
+select substring(customers.city, 0, length(customers.city))
+from customers
+where customer_id = 1;
 -- The following SQL statement deletes the customer  'Alfreds Futterkiste ' from the  'Customers ' table:
+delete
+from customers
+where customer_name = 'Alfreds Futterkiste ';
+-- select * from customers where customer_name = 'Alfreds Futterkiste '; -- check after delete
 -- The following SQL statement deletes all rows in the  'Customers ' table, without deleting the table:
 
 -- copy and then remove the Customers table:
@@ -507,10 +521,12 @@ from customers
 order by customer_id
 limit 3;
 -- The following SQL statement selects the first 50% of the records from the  'Customers ' table (for SQL Server/MS Access):
--- select * from customers where customer_id <= (select (count(*) / 2 + 1) as middle);
--- select from customers (count() / 2 + 1) as middle;
-
--- The following SQL statement shows the equivalent example for Oracle:
+select *
+from customers
+where customer_id < (select count(*) / 2 + 1 from customers);
+-- select number or records in customers table
+select count(*) / 2 + 1
+from customers;
 -- The following SQL statement selects the first three records from the  'Customers ' table, where the country is  'Germany ' (for SQL Server/MS Access):
 select *
 from customers
@@ -533,7 +549,10 @@ select *
 from customers
 where city like '%ondon';
 
--- Return all customers with a City starting with  'L ', followed by any 3 characters, ending with  'o
+-- Return all customers with a City starting with  'B ', followed by any 4 characters, ending with  'n
+select *
+from customers
+where city like 'B____n';
 -- The [] wildcard returns a result if any of the characters inside gets a match.
 -- Return all customers starting with  'a ',  'b ',  'c ',  'd ',  'e ' or  'f ':
 select *
@@ -550,7 +569,16 @@ from customers c
 where lower(LEFT(c.customer_name, 1)) IN ('a', 'b', 'c', 'd', 'e', 'f');
 
 -- Return all customers that starts with  'a ' and are at least 3 characters in length:
+select *
+from customers
+where customer_name like 'a%'
+  and length(customer_name) > 3;
 
+-- Return all customers that starts with  'a ' ignore case and are at least 3 characters in length:
+select *
+from customers
+where lower(customer_name) like 'a%'
+  and length(customer_name) > 3;
 -- Return all customers that have  'r ' in the second position:
 select *
 from customers
