@@ -431,21 +431,53 @@ update customers set city = 'London' where customer_id = 19;
 update customers set city = 'Graz' where customer_id = 20;
 
 -- Select all the different countries from the  'Customers ' table:
+select distinct country
+from customers;
 -- Sort the products by ProductName in reverse order:
 select *
 from products
 order by product_name desc;
--- return the number of different countries.
--- Sort the products by price:
+-- return the number of different countries from customers
+select count(distinct country)
+from customers;
+-- return the number of different countries from suppliers
+select count(distinct country)
+from suppliers;
+-- return the number of different countries from suppliers and customers -- todo: how to count union result set?
+select distinct suppliers.country
+from suppliers
+union
+select distinct customers.country
+from customers;
+-- Sort the products by price 10:
+select *
+from products
+where price = 10;
 -- Select all customers from Mexico:
 select *
 from customers
 where country = 'Mexico';
 
 -- selects all customers from the  'Customers ' table, sorted ascending by the  'Country ' and descending by the  'CustomerName ' column:
+select *
+from customers
+order by (country), customer_name desc;
 -- selects all fields from Customers where Country is  'Germany ' AND City is  'Berlin ' AND PostalCode is higher than 12000:
+select *
+from customers
+where country = 'Germany'
+  and city = 'Berlin'
+  and postal_code > '12000';
 -- Select all Spanish customers that starts with either  'G ' or  'R ':
+select *
+from customers
+where country = 'Spain'
+  and (customer_name like 'G%' or customer_name like 'R%');
 -- Select all customers that either - are from Spain and starts with either  'G ', or starts with the letter  'R ':
+select *
+from customers
+where (country = 'Spain' and customer_name like 'G%')
+   or customer_name like 'R%';
 -- Select all customers from Germany or Spain:
 select *
 from customers
@@ -482,7 +514,13 @@ from customers
 where city not in ('Paris', 'London');
 
 -- Select customers with a CustomerId not greater than 50:
+select *
+from customers
+where customer_id <= 50;
 -- Select customers with a CustomerID not less than 50:
+select *
+from customers
+where customer_id >= 50;
 -- insert a new record in the  'Customers ' table (address optional)
 insert into customers (customer_id, customer_name, contact_name, city, postal_code, country)
 values (92, 'Bob', 'Bobby', 'Texas', 394928, 'USA');
@@ -508,8 +546,22 @@ where address is not null;
 alter table customers
     alter column address drop not null;
 -- Select all records from the Customers where the PostalCode column is empty.
+select *
+from customers
+where postal_code = '';
+-- Select all records from the Customers where the PostalCode column is not empty.
+select *
+from customers
+where postal_code != '';
 -- The following SQL statement updates the first customer (CustomerID = 1) with a new contact person and a new city.
+update customers
+set customer_name = 'New Contact Name',
+    city          = 'Peru'
+where customer_id = 1;
 -- The following SQL statement will update the ContactName to  'Juan ' for all records where country is  'Mexico ':
+update customers
+set customer_name = 'Juan'
+where country = 'Mexico';
 -- Update the City column with adding * prefix of 1-st records in the Customers table.
 update customers
 set city = (concat((select city from customers where customer_id = 1), '*'))
@@ -525,7 +577,6 @@ where customer_id = 1;
 delete
 from customers
 where customer_name = 'Alfreds Futterkiste ';
--- select * from customers where customer_name = 'Alfreds Futterkiste '; -- check after delete
 -- The following SQL statement deletes all rows in the  'Customers ' table, without deleting the table:
 
 -- copy and then remove the Customers table:
