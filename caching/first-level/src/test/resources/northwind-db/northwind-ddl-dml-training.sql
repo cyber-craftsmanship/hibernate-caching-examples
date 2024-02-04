@@ -408,6 +408,28 @@ values (11, 'John', 'Doe', '1968/12/08', 'EmpID1.pic',
 
 -- DML --------------------------------------------------------------------------------------------------------
 
+-- Update city for all customers by correct values
+update customers set city = 'Berlin' where customer_id = 1;
+update customers set city = 'México D.F.' where customer_id = 2;
+update customers set city = 'México D.F.' where customer_id = 3;
+update customers set city = 'London' where customer_id = 4;
+update customers set city = 'Luleå' where customer_id = 5;
+update customers set city = 'Mannheim' where customer_id = 6;
+update customers set city = 'Strasbourg' where customer_id = 7;
+update customers set city = 'Madrid' where customer_id = 8;
+update customers set city = 'Marseille' where customer_id = 9;
+update customers set city = 'Tsawassen' where customer_id = 10;
+update customers set city = 'London' where customer_id = 11;
+update customers set city = 'Buenos Aires' where customer_id = 12;
+update customers set city = 'México D.F.' where customer_id = 13;
+update customers set city = 'Bern' where customer_id = 14;
+update customers set city = 'São Paulo' where customer_id = 15;
+update customers set city = 'London' where customer_id = 16;
+update customers set city = 'Aachen' where customer_id = 17;
+update customers set city = 'Nantes' where customer_id = 18;
+update customers set city = 'London' where customer_id = 19;
+update customers set city = 'Graz' where customer_id = 20;
+
 -- Select all the different countries from the  'Customers ' table:
 -- Sort the products by ProductName in reverse order:
 select *
@@ -494,7 +516,7 @@ set city = (concat((select city from customers where customer_id = 1), '*'))
 where customer_id = 1;
 -- Update the City column with removing * prefix of 1-st records in the Customers table.
 update customers
-set city = (select substring(customers.city, 0, length(customers.city)) from customers where customer_id = 1) where customer_id = 1;
+set city = (select substring(customers.city, 0, length(customers.city)) from customers where customer_id = 1);
 -- select city name from customers without last * symbol
 select substring(customers.city, 0, length(customers.city))
 from customers
