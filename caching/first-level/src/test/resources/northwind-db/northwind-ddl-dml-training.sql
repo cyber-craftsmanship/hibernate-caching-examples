@@ -7,7 +7,7 @@ create table customers
     customer_id   int primary key,
     customer_name varchar(128) not null,
     contact_name  varchar(128) not null,
-    address       varchar(128) not null,
+    address       varchar(128),
     city          varchar(128) not null,
     postal_code   varchar(128) not null,
     country       varchar(128) not null
@@ -425,10 +425,35 @@ where country = 'Mexico';
 -- Select all Spanish customers that starts with either  'G ' or  'R ':
 -- Select all customers that either - are from Spain and starts with either  'G ', or starts with the letter  'R ':
 -- Select all customers from Germany or Spain:
+select *
+from customers
+where country in ('Germany', 'Spain');
+select *
+from customers
+where country = 'Germany'
+   or country = 'Spain';
 -- Select all customers that either: are from Spain and starts with either  'G ', or starts with the letter  'R ':
+select *
+from customers
+where country = 'Spain'
+  and (customer_name like 'G%' or customer_name like 'R%');
+-- todo: other options: wildcard, in ???
 -- Select only the customers that are NOT from Spain:
+select *
+from customers
+where customers.country != ('Spain');
+select *
+from customers
+where customers.country not in ('Spain');
 -- Select customers that does not start with the letter 'A':
+select *
+from customers
+where customer_name not like 'A%';
 -- Select customers with a customerID not between 10 and 60:
+select *
+from customers
+where customers.customer_id not between 10 and 60
+order by customer_id;
 -- Select customers that are not from Paris or London:
 select *
 from customers
@@ -436,10 +461,30 @@ where city not in ('Paris', 'London');
 
 -- Select customers with a CustomerId not greater than 50:
 -- Select customers with a CustomerID not less than 50:
--- insert a new record in the  'Customers ' table:
+-- insert a new record in the  'Customers ' table (address optional)
+insert into customers (customer_id, customer_name, contact_name, city, postal_code, country)
+values (92, 'Bob', 'Bobby', 'Texas', 394928, 'USA');
 -- insert a new record, but only insert data in the  'CustomerName ',  'City ', and  'Country ' columns (CustomerID will be updated automatically):
+-- alter customers table with customer_id auto-incrementation on insert
+alter table customers
+    alter column customer_id type serial using customer_id::serial; --todo: not working???
+
+insert into customers (customer_name, city, country)
+values ('Jason', 'Texas', 'USA');
 -- lists all customers with a NULL value in the  'Address ' field:
+select *
+from customers
+where address is not null;
+select *
+from customers
+where customers.address = null;
 -- lists all customers with a value in the  'Address ' field:
+select *
+from customers
+where address is not null;
+-- drop not null constraint on address
+alter table customers
+    alter column address drop not null;
 -- Select all records from the Customers where the PostalCode column is empty.
 -- The following SQL statement updates the first customer (CustomerID = 1) with a new contact person and a new city.
 -- The following SQL statement will update the ContactName to  'Juan ' for all records where country is  'Mexico ':
@@ -448,12 +493,23 @@ where city not in ('Paris', 'London');
 -- The following SQL statement deletes all rows in the  'Customers ' table, without deleting the table:
 
 -- copy and then remove the Customers table:
--- Update all the records from the Customers table where the Country value is 'Norway'.
--- Delete all the records from the Customers table where the Country value is 'Norway'.
--- Select only the first 3 records of the Customers table:
+-- Insert 2 records to the Customers table where the Country value is 'Botswana'.
+insert into customers (customer_id, customer_name, contact_name, address, city, postal_code, country)
+values (93, 'Loki', 'Loki Wilson', '30 Rose Blr.', 'Gaborone', 12345, 'Botswana'),
+       (94, 'Mike', 'Mike Peterson', '31 Rose Blr.', 'Gaborone', 12345, 'Botswana');
+-- Delete all the records from the Customers table where the Country value is 'Botswana'.
+delete
+from customers
+where country = 'Botswana';
 -- Select the first 3 records of the Customers table:
--- Select the first 3 records of the Customers table:
+select *
+from customers
+order by customer_id
+limit 3;
 -- The following SQL statement selects the first 50% of the records from the  'Customers ' table (for SQL Server/MS Access):
+-- select * from customers where customer_id <= (select (count(*) / 2 + 1) as middle);
+-- select from customers (count() / 2 + 1) as middle;
+
 -- The following SQL statement shows the equivalent example for Oracle:
 -- The following SQL statement selects the first three records from the  'Customers ' table, where the country is  'Germany ' (for SQL Server/MS Access):
 select *
