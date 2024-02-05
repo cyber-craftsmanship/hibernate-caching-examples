@@ -304,3 +304,7 @@ select work_year,
            when experience_level = 'EX' then 'Executive-level'
            end as exp_level_full
 from salaries;
+
+-- #10. examine or check all columns for missing values
+select count(*) - count(employee_residence) as missed
+from salaries;
