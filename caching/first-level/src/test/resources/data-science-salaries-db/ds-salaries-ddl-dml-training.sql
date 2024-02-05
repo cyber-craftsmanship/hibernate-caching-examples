@@ -227,3 +227,80 @@ values (2023, 'SE', 'FT', 'Principal Data Scientist', 80000, 'EUR', 85847, 'ES',
        (2023, 'MI', 'FT', 'Research Engineer', 200000, 'USD', 200000, 'US', 0, 'US', 'M'),
        (2023, 'SE', 'FT', 'Data Architect', 180000, 'USD', 180000, 'US', 100, 'US', 'M'),
        (2023, 'SE', 'FT', 'Data Engineer', 130000, 'USD', 130000, 'US', 0, 'US', 'M');
+
+-- ds_salaries DML sql queries:
+
+-- #1. list salaries of ML Engineer specialists in 2023, add sorting by salary increase.
+select salary, job_title
+from salaries
+where job_title = 'ML Engineer'
+  and work_year = 2023
+order by salary;
+
+-- #2. list country (company_location) with the lowest salary for a Data Scientist in 2023
+select company_location
+from salaries
+where job_title = 'Data Scientist'
+  and work_year = 2023
+order by salary
+limit 1;
+
+-- #3. list the top 5 salaries among all specialists who work completely remotely (remote_ratio = 100)
+select *
+from salaries
+where remote_ratio = '100'
+order by salary desc
+limit 5;
+
+-- #4. list unique values for column 'employee_residence'
+select distinct employee_residence
+from salaries;
+
+-- #5. list the number of unique values of the column 'employee_residence'
+select count(distinct employee_residence)
+from salaries;
+
+-- #6. list the average, minimum and maximum salary for 2023
+select min(salary) as min_salary, avg(salary) as avg_salary, max(salary) as max_salary
+from salaries
+where work_year = 2023;
+
+-- #7. list the 5 highest salaries in 2023 for representatives of the ML Engineer specialty
+select salary as salary_in_usd
+from salaries
+where work_year = 2023
+order by salary desc
+limit 5;
+
+-- #7.1 list the 5 highest salaries in 2023 for representatives of the ML Engineer specialty and convert to Ukrainian hryvnias.
+select salary * 37.56 as salary_in_uah
+from salaries
+where work_year = 2023
+order by salary desc
+limit 5;
+
+-- #8. list the unique values of the remote_ratio column, the data format should be a fraction with two decimal places,
+-- example: the value 50 should be displayed in the format 0.50
+select distinct round((remote_ratio / 100.0), 2) as remote_ratio_formated
+from salaries;
+
+-- #9. list the table data by adding the column 'exp_level_full' with the full name of the employee experience levels according to the column 'experience_level'.
+-- examples: Entry-level (EN), Mid-level (MI), Senior-level (SE), Executive-level (EX)
+select work_year,
+       experience_level,
+       employment_type,
+       job_title,
+       salary,
+       salary_currency,
+       salary_in_usd,
+       employee_residence,
+       remote_ratio,
+       company_location,
+       company_size,
+       case
+           when experience_level = 'EN' then 'Entry-level'
+           when experience_level = 'MI' then 'Mid-level'
+           when experience_level = 'SE' then 'Senior-level'
+           when experience_level = 'EX' then 'Executive-level'
+           end as exp_level_full
+from salaries;
