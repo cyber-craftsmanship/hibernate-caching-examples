@@ -386,3 +386,73 @@ from salaries
 order by salary desc
 offset 1 limit 1;
 --------------------------------------------------------------------------------
+
+select *
+from salaries;
+-- TOP 5 jobs in the field of data science in 2023:
+select salary
+from salaries
+where job_title = 'Data Scientist'
+  and work_year = 2023
+order by salary desc
+limit 5;
+
+-- salary of ML Engineer specialists in 2023
+select salary
+from salaries
+where job_title = 'ML Engineer'
+  and work_year = 2023;
+
+
+select *
+from salaries
+where job_title = 'Data Scientist'
+  and work_year = 2023;
+
+select *
+from salaries
+where salary = 36000
+  and job_title = 'Data Scientist'
+  and work_year = 2023;
+
+-- list country (company_location) in which it is registered the lowest salary for Data Scientist in 2023
+select work_year
+     , job_title
+     , company_location AS country
+     , salary_in_usd
+from salaries
+where salary_in_usd = (select min(salary_in_usd) from salaries where job_title = 'Data Scientist' and work_year = 2023)
+  and work_year = 2023
+  and job_title = 'Data Scientist';
+
+-- ready
+EXPLAIN ANALYZE
+SELECT work_year
+     , job_title
+     , company_location AS country
+     , salary_in_usd
+FROM salaries
+WHERE job_title = 'Data Scientist'
+  AND work_year = '2023'
+ORDER BY 4 ASC
+LIMIT 5;
+
+
+-- list Ukrainians (country code UA), add sorting according to the growth of salary
+select *
+from salaries
+where company_location = 'UA'
+order by salary asc;
+
+-- top 5 salaries among all specialists who work completely remotely (remote_ratio = 100)
+select *
+from salaries
+where remote_ratio = 100
+order by salary desc
+limit 5;
+
+-- list all specialists, who in 2023 had a salary of more than $100,000 and worked in medium-sized companies (company_size = 'M')
+select *
+from salaries
+where salary > 100000
+  and company_size = 'M';
