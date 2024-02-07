@@ -308,3 +308,81 @@ from salaries;
 -- #10. examine or check all columns for missing values
 select count(*) - count(employee_residence) as missed
 from salaries;
+
+-------------------------------------------------------------------------------------
+
+SELECT COUNT(salary_in_usd)
+FROM salaries
+WHERE work_year = '2023'
+  AND company_size = 'M'
+  AND salary_in_usd >= 100000;
+
+SELECT *
+FROM salaries
+WHERE work_year = '2023'
+  AND salary_in_usd > 100000
+  AND company_size = 'M';
+
+-- Select tasks examples:
+
+-- 1. all specialists whose salaries are above the average in the table
+select *
+from salaries
+where salary > (select avg(salary) from salaries);
+
+-- 2. list all specialists who live in countries where the average salary is higher than the average among all countries.
+select *
+from salaries;
+
+select avg(salary)
+from salaries;
+
+select *
+from salaries
+where company_location in (select company_location
+                           from salaries
+                           group by company_location
+                           having avg(salary) > (select avg(salary) from salaries));
+
+-- 3.find the minimum wage among the maximum wages by country
+select max(salary), company_location
+from salaries
+group by company_location
+order by 1
+limit 1;
+
+-- todo: do not work
+-- select min(t.salary)
+-- from
+-- (select max(salary) as max_salaries, company_location
+--  from salaries
+--  group by company_location) as t;
+
+-- 4. For each profession, find the difference between the average salary and the maximum salary of all specialists
+select max(salary)
+from salaries;
+
+select job_title, avg(salary) - (select max(salary) from salaries) diff
+from salaries
+group by job_title;
+
+-- 5. find data on the employee who receives the second largest salary in the table
+select *
+from salaries
+order by salary desc
+limit 2;
+
+select *
+from salaries
+offset 1;
+
+select *
+from (select * from salaries order by salary desc limit 2) as t
+offset 1;
+
+-- in short
+select *
+from salaries
+order by salary desc
+offset 1 limit 1;
+--------------------------------------------------------------------------------
