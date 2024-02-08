@@ -305,8 +305,23 @@ select work_year,
            end as exp_level_full
 from salaries;
 
--- #10. examine or check all columns for missing values
+-- work_year, experience_level, employment_type, job_title, salary, salary_currency, salary_in_usd, employee_residence, remote_ratio, company_location, company_size
+select * from salaries;
 select count(*) - count(employee_residence) as missed
+from salaries;
+
+-- #10. examine or check all columns for missing values
+select count(*) - count(work_year)        as missed_work_year
+     , count(*) - count(experience_level) as missed_experience_level
+     , count(*) - count(employment_type) as missed_employment_type
+     , count(*) - count(job_title) as missed_job_title
+     , count(*) - count(salary) as missed_salary
+     , count(*) - count(salary_currency) as missed_salary_currency
+     , count(*) - count(salary_in_usd) as missed_salary_in_usd
+     , count(*) - count(employee_residence) as missed_employee_residence
+     , count(*) - count(remote_ratio) as missed_remote_ratio
+     , count(*) - count(company_location) as missed_company_location
+     , count(*) - count(company_size) as missed_company_size
 from salaries;
 
 -------------------------------------------------------------------------------------
@@ -323,13 +338,6 @@ WHERE work_year = '2023'
   AND salary_in_usd > 100000
   AND company_size = 'M';
 
--- Select tasks examples:
-
--- 1. all specialists whose salaries are above the average in the table
-select *
-from salaries
-where salary > (select avg(salary) from salaries);
-
 -- 2. list all specialists who live in countries where the average salary is higher than the average among all countries.
 select *
 from salaries;
@@ -344,6 +352,11 @@ where company_location in (select company_location
                            group by company_location
                            having avg(salary) > (select avg(salary) from salaries));
 
+-- 1. all specialists whose salaries are above the average in the table
+select *
+from salaries
+where salary > (select avg(salary) from salaries);
+
 -- 3.find the minimum wage among the maximum wages by country
 select max(salary), company_location
 from salaries
@@ -351,12 +364,11 @@ group by company_location
 order by 1
 limit 1;
 
--- todo: do not work
--- select min(t.salary)
--- from
--- (select max(salary) as max_salaries, company_location
---  from salaries
---  group by company_location) as t;
+select t.max_salaries, company_location
+from
+    (select max(salary) as max_salaries, company_location
+     from salaries
+     group by company_location) as t order by max_salaries limit 1;
 
 -- 4. For each profession, find the difference between the average salary and the maximum salary of all specialists
 select max(salary)
